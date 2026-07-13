@@ -54,21 +54,8 @@ export default function Carousel3D({
       }
     }
 
-    // bucle infinito: si salimos del set central, saltamos un set completo
-    const firstMid = cardEls.current[N];
-    const firstStart = cardEls.current[0];
-    if (firstMid && firstStart && (best < N || best >= 2 * N)) {
-      const setWidth = firstMid.offsetLeft - firstStart.offsetLeft;
-      const delta = best < N ? setWidth : -setWidth;
-      scroller.scrollTo({
-        left: scroller.scrollLeft + delta,
-        behavior: "instant",
-      });
-      activeIndex.current = best + (best < N ? N : -N);
-    } else {
-      activeIndex.current = best;
-    }
-  }, [N]);
+    activeIndex.current = best;
+  }, []);
 
   const requestPaint = useCallback(() => {
     if (!rafPending.current) {
@@ -77,14 +64,52 @@ export default function Carousel3D({
     }
   }, [paint]);
 
-  const centerOn = useCallback((index: number, smooth = true) => {
+  const setWidthOf = useCallback(() => {
+    const a = cardEls.current[0];
+    const b = cardEls.current[N];
+    return a && b ? b.offsetLeft - a.offsetLeft : 0;
+  }, [N]);
+
+  // vuelve al set central con un salto invisible (el contenido se repite,
+  // así que mover el scroll exactamente un set no cambia nada en pantalla).
+  // Solo se llama con el scroll asentado — nunca pelea con una animación.
+  const normalize = useCallback(() => {
     const scroller = scrollerRef.current;
-    const card = cardEls.current[index];
-    if (!scroller || !card) return;
-    scroller.scrollTo({
-      left: card.offsetLeft + card.offsetWidth / 2 - scroller.clientWidth / 2,
-      behavior: smooth ? "smooth" : "instant",
-    });
+    if (!scroller) return;
+    const idx = activeIndex.current;
+    if (idx >= N && idx < 2 * N) return;
+    const w = setWidthOf();
+    if (!w) return;
+    // asignar scrollLeft es instantáneo en TODOS los navegadores
+    scroller.scrollLeft += idx < N ? w : -w;
+    activeIndex.current = idx + (idx < N ? N : -N);
+    requestPaint();
+  }, [N, setWidthOf, requestPaint]);
+
+  const centerOn = useCallback(
+    (index: number, smooth = true) => {
+      const scroller = scrollerRef.current;
+      const card = cardEls.current[index];
+      if (!scroller || !card) return;
+      const left = card.offsetLeft + card.offsetWidth / 2 - scroller.clientWidth / 2;
+      if (smooth) {
+        scroller.scrollTo({ left, behavior: "smooth" });
+      } else {
+        scroller.scrollLeft = left;
+      }
+    },
+    []
+  );
+
+  // avanza/retrocede UNA carta con scroll relativo: sin índices, sin saltos
+  // previos, sin nada que pueda desincronizarse — el bucle lo cierra la
+  // normalización cuando el scroll se asienta
+  const step = useCallback((dir: -1 | 1) => {
+    const scroller = scrollerRef.current;
+    const a = cardEls.current[0];
+    const b = cardEls.current[1];
+    if (!scroller || !a || !b) return;
+    scroller.scrollBy({ left: dir * (b.offsetLeft - a.offsetLeft), behavior: "smooth" });
   }, []);
 
   // arranca centrado en el set del medio
@@ -94,6 +119,24 @@ export default function Carousel3D({
     window.addEventListener("resize", requestPaint);
     return () => window.removeEventListener("resize", requestPaint);
   }, [N, centerOn, requestPaint]);
+
+  // en gestos manuales, el salto de normalización espera a que el scroll
+  // se asiente (150ms sin eventos) para no pelear con la inercia nativa
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    let settle = 0;
+    const onScroll = () => {
+      requestPaint();
+      window.clearTimeout(settle);
+      settle = window.setTimeout(normalize, 150);
+    };
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      window.clearTimeout(settle);
+    };
+  }, [requestPaint, normalize]);
 
   // cualquier gesto sobre la galería pausa el auto-avance unos segundos
   useEffect(() => {
@@ -118,14 +161,14 @@ export default function Carousel3D({
   useEffect(() => {
     const id = window.setInterval(() => {
       if (Date.now() - lastInteraction.current < 5000) return;
-      centerOn(activeIndex.current + 1);
+      step(1);
     }, 4000);
     return () => window.clearInterval(id);
-  }, [centerOn]);
+  }, [step]);
 
   const handleArrow = (dir: -1 | 1) => {
     markRef.current();
-    centerOn(activeIndex.current + dir);
+    step(dir);
   };
 
   const handleSelect = (item: ContentItem, index: number) => {
@@ -166,11 +209,9 @@ export default function Carousel3D({
 
         <div
           ref={scrollerRef}
-          onScroll={requestPaint}
           className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto py-8"
           style={{
             paddingInline: "calc(50% - min(31vw, 120px))",
-            scrollBehavior: "smooth",
           }}
         >
           {looped.map((item, i) => (
@@ -194,7 +235,6 @@ export default function Carousel3D({
                   src={item.image}
                   alt=""
                   draggable={false}
-                  loading={i >= N && i < N + 3 ? "eager" : "lazy"}
                   className={`h-full w-full object-cover ${
                     item.locked
                       ? "scale-110 blur-md brightness-[0.55] saturate-[0.7]"
