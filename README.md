@@ -24,3 +24,6 @@ Abre http://localhost:3000.
 - **Datos del modelo** (nombre, bio, tagline, stats, enlace de OnlyFans): [src/lib/creators.ts](src/lib/creators.ts). Cada entrada genera su ruta `/m/[slug]`.
 - **Tokens de diseño** (colores, glow, animaciones, marquee): [src/app/globals.css](src/app/globals.css).
 - **Tipografías**: [src/app/layout.tsx](src/app/layout.tsx).
+
+
+finalizando
