@@ -5,13 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { ContentItem } from "@/lib/creators";
 
 /**
- * Galería con scroll nativo + snap al centro: el navegador compone el
- * desplazamiento por hardware (igual que un feed), así que es fluida en
- * cualquier teléfono. La carta centrada se eleva con glow; las laterales
- * se atenúan. Tap en carta libre → lightbox; en bloqueada → OF.
- *
- * El único JS por scroll es un rAF que ajusta scale/opacity de 7 elementos
- * (transformaciones 2D, costo mínimo). Auto-avanza y se pausa al tocar.
+ * Galería con scroll nativo + snap al centro, en bucle infinito: las cartas
+ * se renderizan por triplicado y, al acercarse a un extremo, el scroll salta
+ * en silencio exactamente un "set" — como el contenido se repite, el salto es
+ * invisible. El navegador compone el desplazamiento por hardware (fluido en
+ * cualquier teléfono). Tap en carta libre → lightbox; en bloqueada → OF.
  */
 export default function Carousel3D({
   items,
@@ -20,15 +18,19 @@ export default function Carousel3D({
   items: ContentItem[];
   ofUrl: string;
 }) {
+  const N = items.length;
+  const looped = [...items, ...items, ...items];
+
   const [lightbox, setLightbox] = useState<string | null>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const cardEls = useRef<(HTMLDivElement | null)[]>([]);
   const glowEls = useRef<(HTMLDivElement | null)[]>([]);
   const rafPending = useRef(false);
   const lastInteraction = useRef(0);
-  const activeIndex = useRef(0);
+  const activeIndex = useRef(N);
+  const markRef = useRef<() => void>(() => {});
 
-  // atenúa/escala según distancia al centro — solo cuando hay scroll
+  // atenúa/escala según distancia al centro y teletransporta en los bordes
   const paint = useCallback(() => {
     rafPending.current = false;
     const scroller = scrollerRef.current;
@@ -51,8 +53,22 @@ export default function Carousel3D({
         best = i;
       }
     }
-    activeIndex.current = best;
-  }, []);
+
+    // bucle infinito: si salimos del set central, saltamos un set completo
+    const firstMid = cardEls.current[N];
+    const firstStart = cardEls.current[0];
+    if (firstMid && firstStart && (best < N || best >= 2 * N)) {
+      const setWidth = firstMid.offsetLeft - firstStart.offsetLeft;
+      const delta = best < N ? setWidth : -setWidth;
+      scroller.scrollTo({
+        left: scroller.scrollLeft + delta,
+        behavior: "instant",
+      });
+      activeIndex.current = best + (best < N ? N : -N);
+    } else {
+      activeIndex.current = best;
+    }
+  }, [N]);
 
   const requestPaint = useCallback(() => {
     if (!rafPending.current) {
@@ -61,28 +77,23 @@ export default function Carousel3D({
     }
   }, [paint]);
 
+  const centerOn = useCallback((index: number, smooth = true) => {
+    const scroller = scrollerRef.current;
+    const card = cardEls.current[index];
+    if (!scroller || !card) return;
+    scroller.scrollTo({
+      left: card.offsetLeft + card.offsetWidth / 2 - scroller.clientWidth / 2,
+      behavior: smooth ? "smooth" : "instant",
+    });
+  }, []);
+
+  // arranca centrado en el set del medio
   useEffect(() => {
+    centerOn(N, false);
     requestPaint();
     window.addEventListener("resize", requestPaint);
     return () => window.removeEventListener("resize", requestPaint);
-  }, [requestPaint]);
-
-  // auto-avance suave; se pausa unos segundos si el usuario interactúa
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      const scroller = scrollerRef.current;
-      if (!scroller) return;
-      if (Date.now() - lastInteraction.current < 5000) return;
-      const next = (activeIndex.current + 1) % cardEls.current.length;
-      const card = cardEls.current[next];
-      if (!card) return;
-      scroller.scrollTo({
-        left: card.offsetLeft + card.offsetWidth / 2 - scroller.clientWidth / 2,
-        behavior: "smooth",
-      });
-    }, 4000);
-    return () => window.clearInterval(id);
-  }, []);
+  }, [N, centerOn, requestPaint]);
 
   // cualquier gesto sobre la galería pausa el auto-avance unos segundos
   useEffect(() => {
@@ -91,6 +102,7 @@ export default function Carousel3D({
     const mark = () => {
       lastInteraction.current = Date.now();
     };
+    markRef.current = mark;
     const opts: AddEventListenerOptions = { passive: true };
     scroller.addEventListener("pointerdown", mark, opts);
     scroller.addEventListener("wheel", mark, opts);
@@ -102,17 +114,25 @@ export default function Carousel3D({
     };
   }, []);
 
+  // auto-avance suave; se pausa unos segundos si el usuario interactúa
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (Date.now() - lastInteraction.current < 5000) return;
+      centerOn(activeIndex.current + 1);
+    }, 4000);
+    return () => window.clearInterval(id);
+  }, [centerOn]);
+
+  const handleArrow = (dir: -1 | 1) => {
+    markRef.current();
+    centerOn(activeIndex.current + dir);
+  };
+
   const handleSelect = (item: ContentItem, index: number) => {
     // tocar una carta lateral solo la centra; la acción es sobre la central
     if (index !== activeIndex.current) {
-      const scroller = scrollerRef.current;
-      const card = cardEls.current[index];
-      if (scroller && card) {
-        scroller.scrollTo({
-          left: card.offsetLeft + card.offsetWidth / 2 - scroller.clientWidth / 2,
-          behavior: "smooth",
-        });
-      }
+      markRef.current();
+      centerOn(index);
       return;
     }
     if (item.locked) {
@@ -153,7 +173,7 @@ export default function Carousel3D({
             scrollBehavior: "smooth",
           }}
         >
-          {items.map((item, i) => (
+          {looped.map((item, i) => (
             <div
               key={i}
               ref={(el) => {
@@ -166,7 +186,6 @@ export default function Carousel3D({
                 aspectRatio: "3 / 4",
                 background: item.placeholder,
                 willChange: "transform, opacity",
-                transition: "box-shadow 0.3s ease",
               }}
             >
               {item.image && (
@@ -175,7 +194,7 @@ export default function Carousel3D({
                   src={item.image}
                   alt=""
                   draggable={false}
-                  loading={i < 3 ? "eager" : "lazy"}
+                  loading={i >= N && i < N + 3 ? "eager" : "lazy"}
                   className={`h-full w-full object-cover ${
                     item.locked
                       ? "scale-110 blur-md brightness-[0.55] saturate-[0.7]"
@@ -216,6 +235,22 @@ export default function Carousel3D({
             </div>
           ))}
         </div>
+
+        {/* flechas sutiles */}
+        <button
+          aria-label="Previous"
+          onClick={() => handleArrow(-1)}
+          className="absolute left-1 top-1/2 z-10 flex h-12 w-9 -translate-y-1/2 items-center justify-center text-3xl text-foreground/25 transition-colors duration-300 hover:text-accent-soft/80 active:text-accent-soft sm:left-3"
+        >
+          ‹
+        </button>
+        <button
+          aria-label="Next"
+          onClick={() => handleArrow(1)}
+          className="absolute right-1 top-1/2 z-10 flex h-12 w-9 -translate-y-1/2 items-center justify-center text-3xl text-foreground/25 transition-colors duration-300 hover:text-accent-soft/80 active:text-accent-soft sm:right-3"
+        >
+          ›
+        </button>
 
         <p className="pointer-events-none mt-1 w-full text-center text-xs uppercase tracking-[0.3em] text-muted">
           ← swipe · tap to open →
