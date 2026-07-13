@@ -22,9 +22,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Luneel Agency — Contenido exclusivo",
+  title: "FitPrince — Contenido exclusivo",
   description:
-    "Perfiles de suscripción dark/gótica de Luneel Agency: contenido exclusivo, comunidad y pagos seguros.",
+    "Contenido exclusivo de FitPrince: fotos y videos nuevos cada día, sin bots y con pago seguro.",
 };
 
 export default function RootLayout({

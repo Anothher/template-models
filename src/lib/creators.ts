@@ -32,7 +32,7 @@ export type Creator = {
 };
 
 /**
- * Perfiles de Luneel Agency. La foto principal vive en /public/fitprince.jpg —
+ * Perfiles del sitio. La foto principal vive en /public/recursos/fitprince.jpeg —
  * reemplaza ese archivo con la foto real y todo el sitio la toma.
  */
 export const creators: Creator[] = [

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const STORAGE_KEY = "luneel-age-verified";
+const STORAGE_KEY = "age-verified";
 
 /**
  * Modal de verificación de edad. Aparece en cada visita nueva (se recuerda

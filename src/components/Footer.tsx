@@ -65,7 +65,7 @@ export default function Footer() {
           </Link>
         </div>
         <p className="mt-6 text-xs opacity-60">
-          Luneel Agency — {new Date().getFullYear()}
+          FitPrince — {new Date().getFullYear()}
         </p>
       </motion.div>
     </footer>

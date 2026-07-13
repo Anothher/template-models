@@ -1,6 +1,6 @@
-# template-models — Luneel Agency
+# template-models
 
-Sitio de perfil dark/gótico para los modelos de **Luneel Agency**, construido con Next.js (App Router + TypeScript + Tailwind v4) y framer-motion.
+Sitio de perfil dark/gótico para modelos/creadores, construido con Next.js (App Router + TypeScript + Tailwind v4) y framer-motion.
 
 ## Características
 
