@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { Geist, Pirata_One, Cormorant_Garamond } from "next/font/google";
+import localFont from "next/font/local";
 import AgeGate from "@/components/AgeGate";
 import "./globals.css";
+
+// Beside Horizon (DaFont) — ojo: licencia de uso personal; para uso
+// comercial hay que comprarla en masyafistudio.com
+const besideHorizon = localFont({
+  src: "../../public/fonts/Beside Horizon.otf",
+  variable: "--font-beside",
+  display: "swap",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,9 +31,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "FitPrince — Contenido exclusivo",
+  title: "FitPrince — Exclusive content",
   description:
-    "Contenido exclusivo de FitPrince: fotos y videos nuevos cada día, sin bots y con pago seguro.",
+    "FitPrince exclusive content: new photos and videos every day, no bots, secure payment.",
 };
 
 export default function RootLayout({
@@ -34,8 +43,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
-      className={`${geistSans.variable} ${pirata.variable} ${cormorant.variable} h-full antialiased`}
+      lang="en"
+      className={`${geistSans.variable} ${pirata.variable} ${cormorant.variable} ${besideHorizon.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <AgeGate />

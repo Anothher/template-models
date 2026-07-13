@@ -59,22 +59,22 @@ export default function AgeGate() {
               +18
             </h2>
             <p className="mt-3 font-blackletter text-2xl text-accent-soft">
-              Solo para adultos
+              Adults only
             </p>
             <p className="mt-4 leading-relaxed text-muted">
-              Este sitio contiene contenido para mayores de edad. Confirma que
-              tienes 18 años o más para continuar.
+              This site contains adult content. Please confirm you are 18 years
+              of age or older to continue.
             </p>
             <div className="mt-7 flex flex-col gap-3">
               <button onClick={accept} className="btn-blood w-full px-6 py-3.5">
-                Soy mayor de 18 · Entrar
+                I&apos;m over 18 · Enter
               </button>
               <button onClick={reject} className="btn-ghost w-full px-6 py-3">
-                No, salir
+                No, leave
               </button>
             </div>
             <p className="mt-5 text-xs text-muted/70">
-              Al entrar aceptas los términos y la política de privacidad.
+              By entering you agree to the terms and privacy policy.
             </p>
           </motion.div>
         </motion.div>

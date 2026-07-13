@@ -47,15 +47,26 @@ export default function HeroVideo({
         width={32}
         height={44}
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-full w-screen -translate-x-1/2 opacity-65"
+        className="pointer-events-none absolute left-1/2 top-0 h-[125%] w-screen -translate-x-1/2 opacity-50"
         style={{
-          filter: "blur(70px) saturate(1.5) brightness(1.1)",
+          filter: "blur(75px) saturate(1.15)",
           WebkitMaskImage:
-            "linear-gradient(to bottom, black 55%, transparent 100%)",
-          maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
+            "linear-gradient(to bottom, black 42%, rgba(0,0,0,0.2) 66%, transparent 84%)",
+          maskImage:
+            "linear-gradient(to bottom, black 42%, rgba(0,0,0,0.2) 66%, transparent 84%)",
         }}
       />
-      <div className="relative overflow-hidden">
+      <div
+        className="relative overflow-hidden"
+        style={{
+          // disolución radial desde arriba: las esquinas inferiores se funden
+          // antes que el centro — ninguna línea recta que el ojo pueda seguir
+          WebkitMaskImage:
+            "radial-gradient(130% 105% at 50% 0%, black 55%, rgba(0,0,0,0.55) 74%, transparent 96%)",
+          maskImage:
+            "radial-gradient(130% 105% at 50% 0%, black 55%, rgba(0,0,0,0.55) 74%, transparent 96%)",
+        }}
+      >
         <div className="gsap-photo">
           <video
             ref={videoRef}
@@ -69,13 +80,13 @@ export default function HeroVideo({
             className="max-h-[46svh] min-h-60 w-full object-cover object-top"
           />
         </div>
-        {/* funde el video con el fondo */}
+        {/* sombra suave solo arriba, para que el nav se lea bien */}
         <div
           aria-hidden
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to top, var(--background) 4%, rgba(7,5,9,0.55) 26%, rgba(7,5,9,0.08) 55%, rgba(7,5,9,0.25) 100%)",
+              "linear-gradient(to bottom, rgba(7,5,9,0.4), transparent 28%)",
           }}
         />
         {/* contenido superpuesto (nombre, estado) */}

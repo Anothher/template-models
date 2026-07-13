@@ -9,8 +9,6 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Embers from "@/components/Embers";
 import Fog from "@/components/Fog";
-import Reveal from "@/components/Reveal";
-import LetterReveal from "@/components/LetterReveal";
 import Carousel3D from "@/components/Carousel3D";
 import SmokeCursor from "@/components/SmokeCursor";
 import HeroVideo from "@/components/HeroVideo";
@@ -54,36 +52,18 @@ export default function CreatorProfile({ creator }: { creator: Creator }) {
   return (
     <div ref={containerRef} className="relative flex min-h-screen flex-col overflow-x-clip">
       <SmokeCursor />
-      <Nav />
+      <Nav online={creator.online} />
 
       {/* HERO: video con luz ambiental */}
       <section ref={heroRef} className="relative pt-16">
         <Embers count={16} />
         <div className="gsap-hero-fade relative mx-auto w-full max-w-md">
-          <HeroVideo
-            src={creator.video ?? ""}
-            poster={creator.avatar}
-          >
-            <h1 className="font-blackletter neon-flicker-slow text-6xl leading-none text-foreground sm:text-7xl">
-              <LetterReveal text={creator.name} delay={0.1} />
-            </h1>
-            <Reveal delay={0.3}>
-              <p className="mt-1 flex items-center justify-center gap-3 text-sm">
-                <span className="text-muted">{creator.handle}</span>
-                {creator.online && (
-                  <span className="flex items-center gap-1.5 text-emerald-400">
-                    <span className="breathe inline-block h-2 w-2 rounded-full bg-emerald-400" />
-                    Activo ahora
-                  </span>
-                )}
-              </p>
-            </Reveal>
-          </HeroVideo>
+          <HeroVideo src={creator.video ?? ""} poster={creator.avatar} />
         </div>
       </section>
 
-      {/* CARRUSEL 3D */}
-      <section className="relative mx-auto w-full max-w-3xl px-2 pb-20 pt-4 sm:px-5">
+      {/* CARRUSEL 3D — solapado con la caída del video para luz continua */}
+      <section className="relative mx-auto -mt-10 w-full max-w-3xl px-2 pb-20 pt-2 sm:px-5">
         <Fog />
         <Carousel3D items={creator.content} ofUrl={creator.ofUrl} />
       </section>
@@ -97,7 +77,7 @@ export default function CreatorProfile({ creator }: { creator: Creator }) {
             rel="noopener noreferrer"
             className="btn-blood pulse-ring flex w-full px-8 py-4 text-base"
           >
-            Ver todo el contenido →
+            See all my content →
           </a>
         </div>
       </div>

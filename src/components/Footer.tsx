@@ -49,19 +49,19 @@ export default function Footer() {
           ✠
         </motion.div>
         <p className="mb-2 italic">
-          Todas las personas que aparecen tienen 18 años o más.
+          All persons appearing on this site are 18 years of age or older.
         </p>
         <div className="flex items-center justify-center gap-4">
           <Link href="#" className="underline underline-offset-4 transition hover:text-foreground">
-            Privacidad
+            Privacy
           </Link>
           <span aria-hidden>·</span>
           <Link href="#" className="underline underline-offset-4 transition hover:text-foreground">
-            Términos
+            Terms
           </Link>
           <span aria-hidden>·</span>
           <Link href="#" className="underline underline-offset-4 transition hover:text-foreground">
-            Contacto
+            Contact
           </Link>
         </div>
         <p className="mt-6 text-xs opacity-60">

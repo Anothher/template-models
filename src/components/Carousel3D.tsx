@@ -106,7 +106,7 @@ export default function Carousel3D({
         className="relative mx-auto w-full max-w-2xl cursor-grab select-none active:cursor-grabbing"
         style={{
           perspective: "1100px",
-          height: "min(96vw, 480px)",
+          height: "min(90vw, 480px)",
           touchAction: "pan-y",
         }}
         onPointerDown={(e) => {
@@ -140,25 +140,20 @@ export default function Carousel3D({
             className="absolute left-1/2 top-1/2 h-[135%] w-[150%] -translate-x-1/2 -translate-y-1/2"
             style={{
               background:
-                "radial-gradient(ellipse 52% 46% at 50% 46%, rgba(220,20,60,0.14), rgba(88,28,135,0.08) 48%, transparent 72%)",
+                "radial-gradient(ellipse 52% 46% at 50% 46%, rgba(220,20,60,0.08), rgba(88,28,135,0.05) 48%, transparent 72%)",
             }}
           />
-          {/* piso elíptico */}
+          {/* resplandor suave justo bajo las cartas, como luz reflejada */}
           <div
-            className="absolute -bottom-3 left-1/2 h-20 w-[94%] -translate-x-1/2 rounded-[100%] border border-accent/15"
-            style={{ boxShadow: "inset 0 0 28px rgba(220,20,60,0.14)" }}
-          />
-          {/* halo de luz sobre el piso */}
-          <div
-            className="absolute bottom-0 left-1/2 h-16 w-3/4 -translate-x-1/2 rounded-[100%] opacity-80"
+            className="absolute bottom-[9%] left-1/2 h-8 w-1/2 -translate-x-1/2 rounded-[100%]"
             style={{
               background:
-                "radial-gradient(ellipse, rgba(220,20,60,0.3), transparent 70%)",
-              filter: "blur(18px)",
+                "radial-gradient(ellipse, rgba(220,20,60,0.2), transparent 70%)",
+              filter: "blur(14px)",
             }}
           />
         </div>
-        <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
+        <div className="absolute inset-0" style={{ }}>
           {items.map((item, i) => (
             <CarouselCard
               key={i}
@@ -170,8 +165,8 @@ export default function Carousel3D({
             />
           ))}
         </div>
-        <p className="pointer-events-none absolute -bottom-8 left-1/2 w-full -translate-x-1/2 text-center text-xs uppercase tracking-[0.3em] text-muted">
-          ← desliza · toca para abrir →
+        <p className="pointer-events-none absolute bottom-0 left-1/2 w-full -translate-x-1/2 text-center text-xs uppercase tracking-[0.3em] text-muted">
+          ← swipe · tap to open →
         </p>
       </div>
 
@@ -197,7 +192,7 @@ export default function Carousel3D({
               draggable={false}
             />
             <button
-              aria-label="Cerrar"
+              aria-label="Close"
               className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-veil bg-background/70 text-xl text-foreground transition hover:border-accent/60"
               onClick={() => setLightbox(null)}
             >
@@ -245,7 +240,7 @@ function CarouselCard({
 
   return (
     <motion.div
-      className="absolute left-1/2 top-1/2 cursor-pointer overflow-hidden rounded-lg border border-veil shadow-[0_16px_40px_rgba(0,0,0,0.5)]"
+      className="absolute left-1/2 top-1/2 cursor-pointer overflow-hidden rounded-xl shadow-[0_18px_50px_rgba(0,0,0,0.65),0_0_30px_rgba(220,20,60,0.16)]"
       onClick={onSelect}
       style={{
         width: "min(52vw, 230px)",
@@ -274,15 +269,15 @@ function CarouselCard({
             🔒
           </span>
           <span className="text-sm font-semibold tracking-widest uppercase">
-            Bloqueado
+            Locked
           </span>
           <span className="text-[11px] text-foreground/70">
-            Desbloquéalo en mi OF
+            Unlock it on my OF
           </span>
         </div>
       ) : (
         <span className="absolute bottom-2 left-2 rounded-full bg-background/80 px-3 py-1 text-xs font-semibold tracking-wide">
-          Gratis
+          Free
         </span>
       )}
       {/* velo de profundidad (cartas traseras) */}
@@ -291,14 +286,14 @@ function CarouselCard({
         className="pointer-events-none absolute inset-0 bg-background"
         style={{ opacity: veilOpacity }}
       />
-      {/* glow carmesí de la carta frontal */}
+      {/* glow carmesí difuso de la carta frontal (sin línea de borde) */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-lg"
+        className="pointer-events-none absolute inset-0 rounded-xl"
         style={{
           opacity: glowOpacity,
           boxShadow:
-            "inset 0 0 0 1px rgba(220,20,60,0.45), 0 0 34px rgba(220,20,60,0.35)",
+            "0 0 42px rgba(220,20,60,0.4), inset 0 -20px 30px -18px rgba(220,20,60,0.25)",
         }}
       />
     </motion.div>

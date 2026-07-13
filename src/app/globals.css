@@ -61,7 +61,7 @@ body {
 /* ---------- Utilidades góticas ---------- */
 
 .font-blackletter {
-  font-family: var(--font-pirata), "UnifrakturMaguntia", serif;
+  font-family: var(--font-beside), var(--font-pirata), "UnifrakturMaguntia", serif;
   letter-spacing: 0.02em;
 }
 

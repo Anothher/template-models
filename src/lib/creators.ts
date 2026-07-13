@@ -34,7 +34,7 @@ export type Creator = {
 };
 
 /**
- * Perfiles del sitio. La foto principal vive en /public/recursos/fitprince.jpeg —
+ * Perfiles del sitio. La foto principal vive en /public/recursos/fitprince.webp —
  * reemplaza ese archivo con la foto real y todo el sitio la toma.
  */
 export const creators: Creator[] = [
@@ -43,9 +43,9 @@ export const creators: Creator[] = [
     name: "FitPrince",
     handle: "@fitprincevip",
     online: true,
-    tagline: "El contenido que tu feed no se atreve a mostrarte.",
-    bio: "Fotos y videos exclusivos todos los días — sin censura, sin bots. Cada mensaje lo respondo yo. Lo que ves aquí es solo la puerta: lo mejor está adentro. 👑",
-    avatar: "/recursos/fitprince.jpeg",
+    tagline: "The content your feed is afraid to show you.",
+    bio: "Exclusive photos and videos every day — uncensored, no bots. I answer every message myself. What you see here is just the door: the best is inside. 👑",
+    avatar: "/recursos/fitprince.webp",
     video: "/recursos/fitprinceVideo.mp4",
     ofUrl: "https://onlyfans.com/fitprincevip",
     socials: {
@@ -57,43 +57,43 @@ export const creators: Creator[] = [
     content: [
       {
         locked: false,
-        image: "/recursos/fitprince.jpeg",
+        image: "/recursos/fitprince.webp",
         placeholder:
           "radial-gradient(120% 120% at 20% 10%, #3b0d1c 0%, #12060c 55%, #070509 100%)",
       },
       {
         locked: false,
-        image: "/recursos/photo_1.jpg",
+        image: "/recursos/photo_1.webp",
         placeholder:
           "radial-gradient(120% 120% at 80% 20%, #241033 0%, #0e0716 60%, #070509 100%)",
       },
       {
         locked: false,
-        image: "/recursos/photo_2.jpg",
+        image: "/recursos/photo_2.webp",
         placeholder:
           "radial-gradient(120% 120% at 30% 80%, #33101a 0%, #100710 60%, #070509 100%)",
       },
       {
         locked: false,
-        image: "/recursos/photo_3.jpg",
+        image: "/recursos/photo_3.webp",
         placeholder:
           "radial-gradient(120% 120% at 70% 70%, #1b0f2e 0%, #0c0712 60%, #070509 100%)",
       },
       {
         locked: false,
-        image: "/recursos/photo_4.jpg",
+        image: "/recursos/photo_4.webp",
         placeholder:
           "radial-gradient(120% 120% at 50% 30%, #2c0f14 0%, #0f0810 60%, #070509 100%)",
       },
       {
         locked: false,
-        image: "/recursos/photo_5.jpg",
+        image: "/recursos/photo_5.webp",
         placeholder:
           "radial-gradient(120% 120% at 40% 60%, #1f1130 0%, #0d0713 60%, #070509 100%)",
       },
       {
         locked: false,
-        image: "/recursos/photo_6.jpg",
+        image: "/recursos/photo_6.webp",
         placeholder:
           "radial-gradient(120% 120% at 40% 60%, #1f1130 0%, #0d0713 60%, #070509 100%)",
       },

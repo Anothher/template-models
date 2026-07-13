@@ -1,7 +1,7 @@
 import CreatorProfile from "@/components/CreatorProfile";
 import { getCreator } from "@/lib/creators";
 
-export const metadata = { title: "FitPrince — Contenido exclusivo" };
+export const metadata = { title: "FitPrince — Exclusive content" };
 
 export default function Home() {
   const creator = getCreator("fitprince");

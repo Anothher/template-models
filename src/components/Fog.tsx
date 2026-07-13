@@ -9,7 +9,6 @@ export default function Fog() {
           left: "-15%",
           width: "55vw",
           height: "55vw",
-          background: "radial-gradient(circle, rgba(220,20,60,0.14), transparent 65%)",
         }}
       />
       <div

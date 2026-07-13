@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const creator = getCreator((await params).slug);
   return {
-    title: creator ? `${creator.name} — Contenido exclusivo` : "Contenido exclusivo",
+    title: creator ? `${creator.name} — Exclusive content` : "Exclusive content",
   };
 }
 
