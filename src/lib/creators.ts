@@ -16,6 +16,8 @@ export type Creator = {
   tagline: string;
   bio: string;
   avatar?: string;
+  /** Video del hero (ruta en /public). Si existe, reemplaza a la foto. */
+  video?: string;
   /** Enlace externo al que redirige el botón principal. */
   ofUrl: string;
   /**
@@ -44,6 +46,7 @@ export const creators: Creator[] = [
     tagline: "El contenido que tu feed no se atreve a mostrarte.",
     bio: "Fotos y videos exclusivos todos los días — sin censura, sin bots. Cada mensaje lo respondo yo. Lo que ves aquí es solo la puerta: lo mejor está adentro. 👑",
     avatar: "/recursos/fitprince.jpeg",
+    video: "/recursos/fitprinceVideo.mp4",
     ofUrl: "https://onlyfans.com/fitprincevip",
     socials: {
       tiktok: { url: "https://tiktok.com/@littlesix.9", followers: 130300 },
@@ -59,32 +62,38 @@ export const creators: Creator[] = [
           "radial-gradient(120% 120% at 20% 10%, #3b0d1c 0%, #12060c 55%, #070509 100%)",
       },
       {
-        locked: true,
-        image: "/recursos/fitprince.jpeg",
+        locked: false,
+        image: "/recursos/photo_1.jpg",
         placeholder:
           "radial-gradient(120% 120% at 80% 20%, #241033 0%, #0e0716 60%, #070509 100%)",
       },
       {
-        locked: true,
-        image: "/recursos/fitprince.jpeg",
+        locked: false,
+        image: "/recursos/photo_2.jpg",
         placeholder:
           "radial-gradient(120% 120% at 30% 80%, #33101a 0%, #100710 60%, #070509 100%)",
       },
       {
-        locked: true,
-        image: "/recursos/fitprince.jpeg",
+        locked: false,
+        image: "/recursos/photo_3.jpg",
         placeholder:
           "radial-gradient(120% 120% at 70% 70%, #1b0f2e 0%, #0c0712 60%, #070509 100%)",
       },
       {
-        locked: true,
-        image: "/recursos/fitprince.jpeg",
+        locked: false,
+        image: "/recursos/photo_4.jpg",
         placeholder:
           "radial-gradient(120% 120% at 50% 30%, #2c0f14 0%, #0f0810 60%, #070509 100%)",
       },
       {
-        locked: true,
-        image: "/recursos/fitprince.jpeg",
+        locked: false,
+        image: "/recursos/photo_5.jpg",
+        placeholder:
+          "radial-gradient(120% 120% at 40% 60%, #1f1130 0%, #0d0713 60%, #070509 100%)",
+      },
+      {
+        locked: false,
+        image: "/recursos/photo_6.jpg",
         placeholder:
           "radial-gradient(120% 120% at 40% 60%, #1f1130 0%, #0d0713 60%, #070509 100%)",
       },

@@ -133,16 +133,31 @@ export default function Carousel3D({
         }}
         onPointerCancel={() => (dragging.current = false)}
       >
-        {/* halo bajo el carrusel */}
-        <div
-          aria-hidden
-          className="absolute bottom-2 left-1/2 h-16 w-3/4 -translate-x-1/2 rounded-[100%] opacity-70"
-          style={{
-            background:
-              "radial-gradient(ellipse, rgba(220,20,60,0.28), transparent 70%)",
-            filter: "blur(18px)",
-          }}
-        />
+        {/* escenario: foco central + anillo giratorio + piso con glow */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          {/* foco de luz tras las cartas */}
+          <div
+            className="absolute left-1/2 top-1/2 h-[135%] w-[150%] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              background:
+                "radial-gradient(ellipse 52% 46% at 50% 46%, rgba(220,20,60,0.14), rgba(88,28,135,0.08) 48%, transparent 72%)",
+            }}
+          />
+          {/* piso elíptico */}
+          <div
+            className="absolute -bottom-3 left-1/2 h-20 w-[94%] -translate-x-1/2 rounded-[100%] border border-accent/15"
+            style={{ boxShadow: "inset 0 0 28px rgba(220,20,60,0.14)" }}
+          />
+          {/* halo de luz sobre el piso */}
+          <div
+            className="absolute bottom-0 left-1/2 h-16 w-3/4 -translate-x-1/2 rounded-[100%] opacity-80"
+            style={{
+              background:
+                "radial-gradient(ellipse, rgba(220,20,60,0.3), transparent 70%)",
+              filter: "blur(18px)",
+            }}
+          />
+        </div>
         <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
           {items.map((item, i) => (
             <CarouselCard
