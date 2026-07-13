@@ -55,21 +55,21 @@ export default function CreatorProfile({ creator }: { creator: Creator }) {
       <Nav online={creator.online} />
 
       {/* HERO: video con luz ambiental */}
-      <section ref={heroRef} className="relative pt-16">
+      <section ref={heroRef} className="enter-rise relative pt-16">
         <Embers count={16} />
         <div className="gsap-hero-fade relative mx-auto w-full max-w-md">
           <HeroVideo src={creator.video ?? ""} poster={creator.avatar} />
         </div>
       </section>
 
-      {/* CARRUSEL 3D — solapado con la caída del video para luz continua */}
-      <section className="relative mx-auto -mt-10 w-full max-w-3xl px-2 pb-20 pt-2 sm:px-5">
+      {/* CARRUSEL — solapado con la caída del video para luz continua */}
+      <section className="enter-rise relative mx-auto -mt-10 w-full max-w-3xl px-2 pb-20 pt-2 [animation-delay:0.18s] sm:px-5">
         <Fog />
         <Carousel3D items={creator.content} ofUrl={creator.ofUrl} />
       </section>
 
       {/* CTA fija inferior → OnlyFans */}
-      <div className="fixed bottom-0 left-0 z-40 w-full border-t border-veil bg-background/85 px-5 py-4 shadow-[0_-8px_32px_rgba(220,20,60,0.12)] backdrop-blur-md">
+      <div className="enter-rise fixed bottom-0 left-0 z-40 w-full border-t border-veil bg-background/85 px-5 py-4 shadow-[0_-8px_32px_rgba(220,20,60,0.12)] backdrop-blur-md [animation-delay:0.35s]">
         <div className="mx-auto max-w-md">
           <a
             href={creator.ofUrl}

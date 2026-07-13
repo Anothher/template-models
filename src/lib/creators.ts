@@ -45,9 +45,8 @@ export const creators: Creator[] = [
     online: true,
     tagline: "The content your feed is afraid to show you.",
     bio: "Exclusive photos and videos every day — uncensored, no bots. I answer every message myself. What you see here is just the door: the best is inside. 👑",
-    avatar: "/recursos/fitprince.webp",
     video: "/recursos/fitprinceVideo.mp4",
-    ofUrl: "https://onlyfans.com/fitprincevip",
+    ofUrl: "https://onlyfans.com/fitprincevip/c12",
     socials: {
       tiktok: { url: "https://tiktok.com/@littlesix.9", followers: 130300 },
       instagram: { url: "https://instagram.com/littlesix.9", followers: 69000 },

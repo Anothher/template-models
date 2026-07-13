@@ -227,14 +227,47 @@ body {
   pointer-events: none;
 }
 
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.5); }
-  70% { box-shadow: 0 0 0 14px rgba(220, 20, 60, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(220, 20, 60, 0); }
+/* Anillo pulsante barato: escala/opacidad de un ::after (solo compositor,
+   nada de animar box-shadow, que repinta en cada frame) */
+.pulse-ring {
+  position: relative;
+}
+.pulse-ring::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  border: 2px solid rgba(220, 20, 60, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  animation: ring-burst 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  will-change: transform, opacity;
+}
+@keyframes ring-burst {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(1.12);
+    opacity: 0;
+  }
 }
 
-.pulse-ring {
-  animation: pulse-ring 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+/* Entrada de página: una sola pasada al cargar, costo cero después */
+@keyframes enter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.enter-rise {
+  animation: enter-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes breathe {
@@ -251,10 +284,21 @@ body {
   will-change: transform;
 }
 
-/* Móvil: blur más barato para la niebla (el blur grande cuesta GPU) */
+/* Oculta la barra de scroll del carrusel (el scroll sigue funcionando) */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Móvil: niebla estática y con blur más barato (animar blurs gigantes
+   calienta el teléfono; quieta sigue dando la misma atmósfera) */
 @media (max-width: 640px) {
   .fog {
     filter: blur(55px);
+    animation: none;
   }
 }
 
@@ -266,8 +310,9 @@ body {
   .candle-flicker,
   .neon-flicker,
   .neon-flicker-slow,
-  .pulse-ring,
-  .breathe {
+  .pulse-ring::after,
+  .breathe,
+  .enter-rise {
     animation: none;
   }
 }

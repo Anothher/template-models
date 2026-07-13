@@ -26,6 +26,7 @@ export default function SmokeCursor() {
     if (!ctx) return;
 
     let raf = 0;
+    let running = false;
     const particles: Particle[] = [];
     // en táctil (móvil) menos partículas para cuidar batería y FPS
     const coarse = window.matchMedia("(pointer: coarse)").matches;
@@ -53,6 +54,11 @@ export default function SmokeCursor() {
       }
       if (particles.length > maxParticles)
         particles.splice(0, particles.length - maxParticles);
+      // el bucle solo corre mientras haya humo; en reposo, cero trabajo
+      if (!running) {
+        running = true;
+        raf = requestAnimationFrame(tick);
+      }
     };
 
     // dentro de zonas interactivas pesadas (ej. el carrusel) no se genera
@@ -78,6 +84,10 @@ export default function SmokeCursor() {
 
     const tick = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (particles.length === 0) {
+        running = false;
+        return;
+      }
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.life++;

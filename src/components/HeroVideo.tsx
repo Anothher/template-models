@@ -27,15 +27,41 @@ export default function HeroVideo({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // muestrea más despacio en táctil, y solo si el video está en pantalla
+    // y la pestaña visible — fuera de eso, cero trabajo (y cero calor)
+    const interval = window.matchMedia("(pointer: coarse)").matches ? 350 : 200;
+    let inView = true;
+    const io = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+    });
+    io.observe(video);
+
     let timer: number;
     const draw = () => {
-      if (video.readyState >= 2 && !video.paused) {
+      if (inView && !document.hidden && video.readyState >= 2 && !video.paused) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       }
-      timer = window.setTimeout(draw, 200);
+      timer = window.setTimeout(draw, interval);
     };
     draw();
-    return () => window.clearTimeout(timer);
+
+    // si el navegador bloqueó el autoplay (ahorro de batería), reintenta
+    // al primer toque y al volver a la pestaña
+    const tryPlay = () => {
+      video.play().catch(() => {});
+    };
+    const onVisible = () => {
+      if (!document.hidden) tryPlay();
+    };
+    window.addEventListener("touchstart", tryPlay, { once: true, passive: true });
+    document.addEventListener("visibilitychange", onVisible);
+
+    return () => {
+      window.clearTimeout(timer);
+      io.disconnect();
+      window.removeEventListener("touchstart", tryPlay);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, []);
 
   return (

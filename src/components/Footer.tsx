@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 
 function WaveLine() {
@@ -38,7 +37,7 @@ export default function Footer() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="px-5 py-10"
+        className="px-5 py-8"
       >
         <motion.div
           aria-hidden
@@ -51,19 +50,6 @@ export default function Footer() {
         <p className="mb-2 italic">
           All persons appearing on this site are 18 years of age or older.
         </p>
-        <div className="flex items-center justify-center gap-4">
-          <Link href="#" className="underline underline-offset-4 transition hover:text-foreground">
-            Privacy
-          </Link>
-          <span aria-hidden>·</span>
-          <Link href="#" className="underline underline-offset-4 transition hover:text-foreground">
-            Terms
-          </Link>
-          <span aria-hidden>·</span>
-          <Link href="#" className="underline underline-offset-4 transition hover:text-foreground">
-            Contact
-          </Link>
-        </div>
         <p className="mt-6 text-xs opacity-60">
           FitPrince — {new Date().getFullYear()}
         </p>
